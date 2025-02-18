@@ -7,6 +7,7 @@ const {
     DeleteObjectCommand,
 } = require("@aws-sdk/client-s3");
 const musicMetadata = require("music-metadata");
+const sharp = require("sharp");
 const getFormattedDate = require("../utils/formatDate");
 
 const BASE_URL = process.env.BASE_URL;
@@ -40,10 +41,11 @@ const uploadFiles = async (req, res) => {
                             "image/jpeg" ||
                             "image/png";
 
+                        const { width, height } = await sharp(coverImageBuffer).metadata();
                         const imageExt = imageMimeType.split("/")[1];
 
                         coverImageKey = `${fileBaseName}-${language}-${year ? year : null
-                            }-${getFormattedDate()}.${imageExt}`;
+                            }-${getFormattedDate()}-${width}x${height}.${imageExt}`;
 
                         // Upload cover image to S3
                         await s3.send(
