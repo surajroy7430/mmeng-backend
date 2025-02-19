@@ -19,6 +19,7 @@ const uploadFiles = async (req, res) => {
 
         const uploadedFiles = await Promise.all(
             req.files.map(async (file) => {
+                const fileName = file.originalname.replace(/\s+/g, "_");
                 const fileKey = file.originalname.replace(/[\s-,]+/g, "-");
 
                 let coverImageKey = null;
@@ -81,7 +82,7 @@ const uploadFiles = async (req, res) => {
                     : null;
 
                 const newFile = await File.create({
-                    filename: fileKey,
+                    filename: fileName,
                     viewUrl,
                     downloadUrl,
                     coverImageUrl,
