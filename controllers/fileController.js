@@ -19,14 +19,14 @@ const uploadFiles = async (req, res) => {
 
         const uploadedFiles = await Promise.all(
             req.files.map(async (file) => {
-                const fileKey = file.originalname.replace(/\s+/g, "_");
+                const fileKey = file.originalname.replace(/[\s-,]+/g, "-");
 
                 let coverImageKey = null;
                 if (file.mimetype.startsWith("audio/")) {
                     const metadata = await musicMetadata.parseBuffer(file.buffer);
 
                     const fileBaseName = file.originalname
-                        .replace(/\s+/g, "_")
+                        .replace(/[\s-,]+/g, "-")
                         .replace(/\.[a-zA-Z0-9]+$/, "");
 
                     const year = metadata.common.year || null;
