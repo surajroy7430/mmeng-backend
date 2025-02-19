@@ -19,8 +19,11 @@ const uploadFiles = async (req, res) => {
 
         const uploadedFiles = await Promise.all(
             req.files.map(async (file) => {
-                const fileName = file.originalname.replace(/\s+/g, "_");
-                const fileKey = file.originalname.replace(/[\s-,]+/g, "-");
+                const fileName = file.originalname;
+                const fileKey = file.originalname
+                    .replace(/[\s-,]+/g, "-")
+                    .replace(/[\(\)]/g, "")
+                    .trim();
 
                 let coverImageKey = null;
                 if (file.mimetype.startsWith("audio/")) {
@@ -28,7 +31,9 @@ const uploadFiles = async (req, res) => {
 
                     const fileBaseName = file.originalname
                         .replace(/[\s-,]+/g, "-")
-                        .replace(/\.[a-zA-Z0-9]+$/, "");
+                        .replace(/[\(\)]/g, "")
+                        .replace(/\.[a-zA-Z0-9]+$/, "")
+                        .trim();
 
                     const year = metadata.common.year || null;
                     const language = metadata.common.language || "English";
