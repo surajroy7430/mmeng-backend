@@ -57,7 +57,7 @@ const uploadFiles = async (req, res) => {
                 let fileBuffer = file.buffer;
                 let fileSize = file.size;
 
-                if (file.mimetype.startsWith("audio/") && fileSize > 4 * 1024 * 1024) {
+                if (file.mimetype.startsWith("audio/") && fileSize >= 5 * 1024 * 1024) {
                     fileBuffer = await compressAudio(fileBuffer);
                     fileSize = fileBuffer.length;
                 }
